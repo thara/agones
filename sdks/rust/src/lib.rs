@@ -3,8 +3,12 @@ extern crate grpcio_proto;
 extern crate protobuf;
 extern crate futures;
 
-pub mod sdk_grpc;
-pub mod sdk;
+mod sdk;
+mod sdk_grpc;
+
+pub use sdk::*;
+pub use sdk_grpc::*;
+
 
 #[cfg(test)]
 mod tests {

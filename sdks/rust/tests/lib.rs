@@ -1,23 +1,47 @@
 extern crate grpcio;
 extern crate agones_sdk;
 
-use std::sync::Arc;
+use agones_sdk::{Empty, Sdk, create_sdk};
 
-use grpcio::{ChannelBuilder, EnvBuilder};
-use agones_sdk::sdk::Empty;
-use agones_sdk::sdk_grpc::SdkClient;
+static mut SDK_READY: bool = false;
+static mut SDK_SHUTDOWN: bool = false;
 
 #[test]
 fn it_works() {
-   let env = Arc::new(EnvBuilder::new().build());
-    let ch = ChannelBuilder::new(env).connect("localhost:50051");
-    let client = SdkClient::new(ch);
+    let sm = SdkMock{};
+    let s = create_sdk(sm);
 
     let req = Empty::new();
-    client.ready(&req).expect("ready");
+    s.ready(req);
+    unsafe {
+        assert_eq!(SDK_READY, false);
+        assert_eq!(SDK_SHUTDOWN, false);
+    }
 
-    let req = Empty::new();
-    client.shutdown(&req).expect("shutdown");
 
-    assert_eq!(4, 4);
+}
+
+#[derive(Debug, Clone, Copy)]
+struct SdkMock {
+}
+
+impl Sdk for SdkMock {
+
+    fn ready(&self, _ctx: grpcio::RpcContext, req: Empty, sink: grpcio::UnarySink<Empty>) {
+        unsafe {
+            SDK_READY = true;
+        }
+        sink.success(req);
+    }
+
+    fn shutdown(&self, _ctx: grpcio::RpcContext, req: Empty, sink: grpcio::UnarySink<Empty>) {
+        unsafe {
+            SDK_SHUTDOWN = true;
+        }
+        sink.success(req);
+    }
+
+    fn health(&self, ctx: grpcio::RpcContext, stream: grpcio::RequestStream<Empty>, sink: grpcio::ClientStreamingSink<Empty>) {
+
+    }
 }
