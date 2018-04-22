@@ -45,36 +45,40 @@ impl From<grpcio::Error> for SdkError {
 }
 
 pub type Result<T> = result::Result<T, SdkError>;
+pub type SdkClient = sdk_grpc::SdkClient;
 
-pub struct Sdk {
-    client: sdk_grpc::SdkClient,
+pub trait Sdk {
+    fn ready(&self) -> Result<()>;
+    fn shutdown(&self) -> Result<()>;
+    fn health(&self) -> Result<()>;
 }
 
 const PORT: i32 = 59357;
 
-impl Sdk {
-    pub fn new() -> Result<Self> {
-        let addr = format!("localhost:{}", PORT);
-        let env = Arc::new(EnvBuilder::new().build());
-        let ch = ChannelBuilder::new(env).keepalive_timeout(Duration::new(30, 0)).connect(&addr);
-        let cli = sdk_grpc::SdkClient::new(ch);
-        let req = sdk::Empty::new();
-        let _ = cli.ready(&req).map_err(SdkError::GRPC)?;
-        Ok(Sdk{client : cli})
-    }
+pub fn new_sdk() -> Result<Box<Sdk>> {
+    let addr = format!("localhost:{}", PORT);
+    let env = Arc::new(EnvBuilder::new().build());
+    let ch = ChannelBuilder::new(env).keepalive_timeout(Duration::new(30, 0)).connect(&addr);
+    let cli = sdk_grpc::SdkClient::new(ch);
+    let req = sdk::Empty::new();
+    let _ = cli.ready(&req).map(Box::new).map_err(SdkError::GRPC)?;
+    Ok(Box::new(cli))
+}
 
-    pub fn ready(&self) -> Result<()> {
+impl Sdk for SdkClient {
+
+    fn ready(&self) -> Result<()> {
         let req = sdk::Empty::default_instance();
-        self.client.ready(req).map(|_| ()).map_err(SdkError::GRPC)
+        self.ready(req).map(|_| ()).map_err(SdkError::GRPC)
     }
 
-    pub fn shutdown(&self) -> Result<()> {
+    fn shutdown(&self) -> Result<()> {
         let req = sdk::Empty::default_instance();
-        self.client.shutdown(req).map(|_| ()).map_err(SdkError::GRPC)
+        self.shutdown(req).map(|_| ()).map_err(SdkError::GRPC)
     }
 
-    pub fn health(&self) -> Result<()> {
-        self.client.health().map(|_| ()).map_err(SdkError::GRPC)
+    fn health(&self) -> Result<()> {
+        self.health().map(|_| ()).map_err(SdkError::GRPC)
     }
 }
 
@@ -82,7 +86,7 @@ impl Sdk {
 mod tests {
     #[test]
     fn it_works() {
-        match ::Sdk::new() {
+        match ::new_sdk() {
             Ok(sdk) => {
                 let _ = sdk.ready();
                 let _ = sdk.health();
