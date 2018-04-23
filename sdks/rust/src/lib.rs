@@ -30,7 +30,7 @@ pub fn new_sdk() -> Result<Box<Sdk>> {
     let ch = ChannelBuilder::new(env).keepalive_timeout(Duration::new(30, 0)).connect(&addr);
     let cli = sdk_grpc::SdkClient::new(ch);
     let req = sdk::Empty::new();
-    let _ = cli.ready(&req).map(Box::new).map_err(SdkError::GRPC)?;
+    let _ = cli.ready(&req).map(Box::new).map_err(SdkError::Grpc)?;
     Ok(Box::new(cli))
 }
 
@@ -38,16 +38,16 @@ impl Sdk for SdkClient {
 
     fn ready(&self) -> Result<()> {
         let req = sdk::Empty::default_instance();
-        self.ready(req).map(|_| ()).map_err(SdkError::GRPC)
+        self.ready(req).map(|_| ()).map_err(SdkError::Grpc)
     }
 
     fn shutdown(&self) -> Result<()> {
         let req = sdk::Empty::default_instance();
-        self.shutdown(req).map(|_| ()).map_err(SdkError::GRPC)
+        self.shutdown(req).map(|_| ()).map_err(SdkError::Grpc)
     }
 
     fn health(&self) -> Result<()> {
-        self.health().map(|_| ()).map_err(SdkError::GRPC)
+        self.health().map(|_| ()).map_err(SdkError::Grpc)
     }
 }
 
