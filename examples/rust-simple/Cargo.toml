@@ -1,0 +1,8 @@
+[package]
+name = "rust-simple"
+version = "0.1.0"
+authors = ["Tomochika Hara <tomochika1985@gmail.com>"]
+
+[dependencies]
+agones = { path = "../../sdks/rust" }
+grpcio = "0.2.2"
