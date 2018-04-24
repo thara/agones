@@ -7,7 +7,7 @@ Check the [Client SDK Documentation](../) for more details on each of the SDK fu
 
 ```toml
 [dependencies]
-agnoes_sdk = { path = "../agnoes/sdks/rust" }
+agones = { path = "../agones/sdks/rust" }
 ```
 
 ```rust
