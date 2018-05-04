@@ -14,7 +14,7 @@ pub struct Sdk {
 
 impl Sdk {
 
-    pub fn new_sdk() -> Result<Sdk> {
+    pub fn new() -> Result<Sdk> {
         let addr = format!("localhost:{}", PORT);
         let env = Arc::new(EnvBuilder::new().build());
         let ch = ChannelBuilder::new(env).keepalive_timeout(Duration::new(30, 0)).connect(&addr);
@@ -39,5 +39,13 @@ impl Sdk {
     pub fn health(&self) -> Result<()> {
         let res = self.client.health().map(|_| ())?;
         Ok(res)
+    }
+}
+
+impl Clone for Sdk {
+    fn clone(&self) -> Self {
+        Self {
+            client: Arc::clone(&self.client),
+        }
     }
 }
