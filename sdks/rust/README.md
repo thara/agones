@@ -3,7 +3,7 @@
 This is the Rust version of the Agones Game Server Client SDK. 
 Check the [Client SDK Documentation](../) for more details on each of the SDK functions and how to run the SDK locally.
 
-> protoc --rust_out sdks/rust/src --grpc_out=sdks/rust/src --plugin=protoc-gen-grpc=`which grpc_rust_plugin` sdk.proto
+## Usage
 
 ```toml
 [dependencies]
@@ -11,31 +11,17 @@ agones = { path = "../agones/sdks/rust" }
 ```
 
 ```rust
-extern crate grpcio;
-extern crate agones_sdk;
-
-use grpcio::{ChannelBuilder, EnvBuilder};
-use agones_sdk::{Empty, SdkClient};
-
-use std::sync::Arc;
+extern crate agones;
 ```
 
 ```rust
-let env = Arc::new(EnvBuilder::new().build());
-let ch = ChannelBuilder::new(env).connect("localhost:50051");
-let client = SdkClient::new(ch);
+let sdk = agones::Sdk::new()?;
 ```
 
 ```rust
-let req = Empty::new();
-let result = client.ready(&req).expect('ready');
-```
-
-```rust
-client.health();
+sdk.health()?;
 ```
 
 ```shutdown
-let req = Empty::new();
-let result = client.shutdown(&req).expect('shutdown');
+sdk.shutdown()?;
 ```
