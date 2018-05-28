@@ -1,5 +1,4 @@
 extern crate agones;
-extern crate grpcio;
 
 use std::result::Result;
 use std::thread;
