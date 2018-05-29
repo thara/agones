@@ -1,3 +1,4 @@
+//! the Rust game server SDK
 #[macro_use]
 extern crate error_chain;
 extern crate grpcio;
