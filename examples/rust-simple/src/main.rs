@@ -44,7 +44,7 @@ fn run() -> Result<(), String>{
 
         if i == 5 {
             println!("Shutting down after 60 seconds...");
-            sdk.shutdown().map_err(|e| format!("Could not run Shutdown(): {}. Exiting!", e))?;
+            sdk.shutdown().map_err(|e| format!("Could not run Shutdown: {}. Exiting!", e))?;
             println!("...marked for Shutdown");
         }
     }
