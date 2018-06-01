@@ -3,7 +3,15 @@
 This is the Rust version of the Agones Game Server Client SDK. 
 Check the [Client SDK Documentation](../) for more details on each of the SDK functions and how to run the SDK locally.
 
-## Installation
+## Prerequisites
+
+- CMake >= 3.8.0
+- Rust >= 1.19.0
+- Go (>=1.7)
+
+The SDK needs the above for building to [gRPC-rs](https://github.com/pingcap/grpc-rs).
+
+## Usage
 
 Add this crate to `dependencies` section in your Cargo.toml.
 Specify a directory where this README.md is located to the `path`.
@@ -14,8 +22,6 @@ agones = { path = "../agones/sdks/rust" }
 ```
 
 Add `extern crate agones` to your crate root.
-
-## Usage
 
 To begin working with the SDK, create an instance of it. This function blocks until connection and handshake are made.
 
