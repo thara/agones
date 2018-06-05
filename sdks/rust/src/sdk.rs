@@ -5,6 +5,7 @@ use grpcio::{ChannelBuilder, EnvBuilder};
 use errors::*;
 use grpc::sdk as sdk;
 use grpc::sdk_grpc as sdk_grpc;
+use protobuf::Message;
 
 const PORT: i32 = 59357;
 
