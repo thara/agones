@@ -44,6 +44,7 @@ Documentation and usage guides on how to develop and host dedicated game servers
 ### Quickstarts:
  - [Create a Game Server](./docs/create_gameserver.md)
  - [Create a Game Server Fleet](./docs/create_fleet.md)
+ - [Edit Your First Game Server (Go)](./docs/edit_first_game_server.md)
 
 ### Guides
  - [Integrating the Game Server SDK](sdks)
@@ -77,6 +78,8 @@ Participation in this project comes under the [Contributor Covenant Code of Cond
 Please read the [contributing](CONTRIBUTING.md) guide for directions on submitting Pull Requests to Agones.
 
 See the [Developing, Testing and Building Agones](build/README.md) documentation for developing, testing and building Agones from source.
+
+The [Release Process](docs/governance/release_process.md) documentation displays the project's upcoming release calendar and release process. 
 
 Agones is in active development - we would love your help in shaping its future!
 

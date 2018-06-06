@@ -190,8 +190,10 @@ We can install Agones to the cluster using the
 [install.yaml](https://github.com/GoogleCloudPlatform/agones/blob/release-0.1/install.yaml) file.
 
 ```bash
-kubectl apply -f https://raw.githubusercontent.com/googlecloudplatform/agones/release-0.1/install.yaml
+kubectl apply -f https://github.com/GoogleCloudPlatform/agones/raw/release-0.2.0/install/yaml/install.yaml
 ```
+
+You can also find the install.yaml in the latest `agones-install` zip from the [releases](https://github.com/GoogleCloudPlatform/agones/releases) archive.
 
 > Note: Installing Agones with the `intall.yaml` will setup the TLS certificates stored in this repository for securing 
 > kubernetes webhooks communication. If you want to generates new certificates or use your own,
