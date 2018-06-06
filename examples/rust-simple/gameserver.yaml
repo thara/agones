@@ -10,5 +10,5 @@ spec:
     spec:
       containers:
       - name: rust-simple
-        image: rust-simple-server:0.1
+        image: gcr.io/agones-images/rust-simple-server:0.1
         imagePullPolicy: IfNotPresent
