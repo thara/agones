@@ -4,6 +4,3 @@ version = "0.1.0"
 
 [dependencies]
 agones = { path = "../../sdks/rust" }
-grpcio = "0.2.2"
-futures = "0.1.21"
-protobuf = "2.0.2"

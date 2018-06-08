@@ -1,6 +1,4 @@
 extern crate agones;
-extern crate futures;
-extern crate protobuf;
 
 use std::result::Result;
 use std::thread;
