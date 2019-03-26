@@ -34,7 +34,7 @@ fn main() {
         Ok(_) => {
             println!("Rust Game Server finished.");
             0
-        },
+        }
         Err(msg) => {
             println!("{}", msg);
             1
@@ -42,12 +42,11 @@ fn main() {
     });
 }
 
-fn run() -> Result<(), String>{
-
+fn run() -> Result<(), String> {
     println!("Creating SDK instance");
     let sdk = agones::Sdk::new().map_err(|_| "Could not connect to the sidecar. Exiting!")?;
 
-    let _t = thread::spawn(enclose!{(sdk) move || {
+    let _t = thread::spawn(enclose! {(sdk) move || {
         loop {
             match sdk.health() {
                 (s, Ok(_)) => {
@@ -73,7 +72,8 @@ fn run() -> Result<(), String>{
 
         if i == 5 {
             println!("Shutting down after 60 seconds...");
-            sdk.shutdown().map_err(|e| format!("Could not run Shutdown: {}. Exiting!", e))?;
+            sdk.shutdown()
+                .map_err(|e| format!("Could not run Shutdown: {}. Exiting!", e))?;
             println!("...marked for Shutdown");
         }
     }
