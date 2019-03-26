@@ -23,5 +23,6 @@ extern crate protobuf;
 pub mod errors;
 mod grpc;
 mod sdk;
+pub mod types;
 
 pub use sdk::Sdk;
