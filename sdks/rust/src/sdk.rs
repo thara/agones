@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use futures::{Future, Sink};
+use futures::{Future, Sink, Stream};
 use grpcio;
 use std::sync::{Arc, Mutex};
 use std::time::Duration;
@@ -21,6 +21,7 @@ use errors::*;
 use grpc::sdk;
 use grpc::sdk_grpc;
 use protobuf::Message;
+use types::*;
 
 const PORT: i32 = 59357;
 
@@ -87,6 +88,63 @@ impl Sdk {
             }
             Err(e) => (self, Err(ErrorKind::Grpc(e).into())),
         }
+    }
+
+    /// Set a Label value on the backing GameServer record that is stored in Kubernetes
+    pub fn set_label<S>(&self, key: S, value: S) -> Result<()>
+    where
+        S: Into<String>,
+    {
+        let mut kv = sdk::KeyValue::new();
+        kv.set_key(key.into());
+        kv.set_value(value.into());
+        let res = self.client.set_label(&kv).map(|_| ())?;
+        Ok(res)
+    }
+
+    /// Set a Annotation value on the backing Gameserver record that is stored in Kubernetes
+    pub fn set_annotation<S>(&self, key: S, value: S) -> Result<()>
+    where
+        S: Into<String>,
+    {
+        let mut kv = sdk::KeyValue::new();
+        kv.set_key(key.into());
+        kv.set_value(value.into());
+        let res = self.client.set_annotation(&kv).map(|_| ())?;
+        Ok(res)
+    }
+
+    /// Returns most of the backing GameServer configuration and Status
+    pub fn get_gameserver(&self) -> Result<GameServer> {
+        let req = sdk::Empty::new();
+        let res = self
+            .client
+            .get_game_server(&req)
+            .map(|e| GameServer::from_message(e))?;
+        Ok(res)
+    }
+
+    /// Watch the backing GameServer configuration on updated
+    pub fn watch_gameserver<F>(&self, mut watcher: F) -> Result<()>
+    where
+        F: FnMut(GameServer) -> (),
+    {
+        let req = sdk::Empty::new();
+        let mut receiver = self
+            .client
+            .watch_game_server(&req)?
+            .map(|e| GameServer::from_message(e));
+        loop {
+            match receiver.into_future().wait() {
+                Ok((Some(game_server), r)) => {
+                    watcher(game_server);
+                    receiver = r;
+                }
+                Ok((None, _)) => break,
+                Err((e, _)) => return Err(e.into()),
+            }
+        }
+        Ok(())
     }
 }
 
