@@ -54,6 +54,8 @@ if sdk.shutdown().is_err() {
 }
 ```
 
+{{% feature publishVersion="0.10.0" %}}
+
 To [set a Label]({{< relref "_index.md#setlabel-key-value" >}}) on the backing `GameServer` call `sdk.set_label(key, value)`.
 
 ```rust
@@ -84,6 +86,8 @@ sdk.watch_gameserver(|gameserver| {
     println!("GameServer Update, state: {}", gameserver.status.unwrap().state);
 })?;
 ```
+
+{{% /feature %}}
 
 
 For more information, please read the [SDK Overview]({{< relref "_index.md" >}}), check out {{< ghlink href="sdks/rust/src/sdk.rs" >}}agones sdk implementation{{< /ghlink >}} and also look at the {{< ghlink href="examples/rust-simple" >}}Rust example{{< / >}}.
